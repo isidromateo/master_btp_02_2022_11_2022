@@ -1,0 +1,15 @@
+@EndUserText.label: 'Travel (Service Definition)'
+define service ZSD_TRAVEL_IMG {
+  expose Z_C_TRAVEL_IMG as travel;
+  expose Z_C_BOOKING_IMG as Booking;
+  expose Z_C_BOOKSUPPL_IMG as BookingSupplement;
+  expose /DMO/I_Supplement as SUPLEMENT;
+  expose /DMO/I_SupplementText as supplementText;
+  expose /DMO/I_Customer as passenger;
+  expose /DMO/I_Agency as Agency;
+  expose /DMO/I_Carrier as Airline;
+  expose /DMO/I_Connection as FlightClonnection;
+  expose /DMO/I_Flight as Flight;
+  expose I_Currency as Currency;
+  expose I_Country as Country;
+}

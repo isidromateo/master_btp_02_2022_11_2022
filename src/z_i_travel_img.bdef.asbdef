@@ -1,0 +1,94 @@
+//managed implementation in class zbp_i_travel_img unique;
+//strict; //Comment this line in to enable strict mode. The strict mode is prerequisite to be future proof regarding syntax and to be able to release your BO.
+managed;
+
+define behavior for Z_I_TRAVEL_IMG alias Travel
+implementation in class zbp_i_travel_img unique
+persistent table ztb_travel_img
+with additional save
+lock master
+authorization master ( instance )
+etag master last_changed_at
+{
+  // adminstrative fields: Read only
+  field ( readonly ) last_changed_at, last_changed_by, created_at, created_by;
+  // mandatory fields that are required to create a travel
+  field ( mandatory : create ) Travel_Id, agency_id, overall_status, booking_fee, currency_code;
+  // dynamic field control
+  field ( features : instance ) travel_id, overall_status;
+
+  create;
+  update;
+  delete;
+
+  // Validation
+  validation validateCustomer on save { field customer_id; }
+  validation validateDates on save { field begin_date, end_date; }
+  validation validateStatus on save { field overall_status; }
+
+  // Actions
+  action ( features : instance ) acceptTravel result [1] $self;
+  action ( features : instance ) rejectTravel result [1] $self;
+
+  action createTravelByTemplate result [1] $self;
+
+
+  // Association
+  association _Booking { create ( features : instance ); }
+
+  // Mapping
+  mapping for ztb_travel_img corresponding;
+}
+
+define behavior for Z_I_BOOKING_IMG alias Booking
+implementation in class zbp_i_booking_img unique
+persistent table ztb_booking_img
+lock dependent by _Travel
+authorization dependent by _travel
+etag master last_changed_at
+{
+  // Static fields Control
+  field ( readonly ) travel_id;
+  field ( mandatory : create ) Booking_Id, carrier_id, connection_id, flight_date, Booking_status;
+
+  update;
+  delete;
+
+  // Validation
+  validation validateStatus on save { field booking_status; }
+
+  // Determination
+  determination CalculateTotalFlightPrice on modify { field flight_price, currency_code; }
+
+  // Association
+  association _Travel;
+  association _bookingSupplement { create ( features : instance ); }
+
+  // Mapping
+  mapping for ztb_booking_img corresponding;
+}
+
+define behavior for Z_I_BOOKSUPPL_IMG alias Supplement
+implementation in class zbp_i_BOOKSUPPL_img unique
+with unmanaged save
+lock dependent by _travel
+//persistent table ztb_booksupl_img
+authorization dependent by _travel
+etag master last_changed_at
+{
+  field ( readonly ) travel_id, booking_id;
+  field ( mandatory : create ) supplement_id, price;
+
+  update;
+  delete;
+
+  // Determination
+  determination CalculateTotaSupplPrice on modify { field price, currency; }
+
+  // Associations
+  association _travel;
+  association _Booking;
+
+  // Mapping
+  mapping for ztb_log_img corresponding;
+}

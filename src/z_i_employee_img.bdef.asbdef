@@ -1,0 +1,18 @@
+managed implementation in class zbp_i_employee_img unique;
+//strict; //Comment this line in to enable strict mode. The strict mode is prerequisite to be future proof regarding syntax and to be able to release your BO.
+with draft;
+
+define behavior for Z_I_EMPLOYEE_IMG alias employee
+persistent table zemployee_img
+draft table zemployee_img_d
+//authorization master ( instance )
+//etag master <field_name>
+lock master
+total etag lchg_date_time
+etag master lchg_date_time
+{
+  field ( readonly, numbering : managed ) e_number;
+  create;
+  update;
+  delete;
+}

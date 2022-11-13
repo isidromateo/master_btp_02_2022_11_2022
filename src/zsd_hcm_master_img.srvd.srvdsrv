@@ -1,0 +1,4 @@
+@EndUserText.label: 'HCM Master (Sevice Definition)'
+define service ZSD_HCM_MASTER_IMG {
+  expose Z_C_HCM_MASTER_IMG as HCMMaster;
+}

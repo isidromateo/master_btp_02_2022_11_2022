@@ -1,0 +1,14 @@
+unmanaged implementation in class zbp_i_hcm_master_img unique;
+//strict; //Comment this line in to enable strict mode. The strict mode is prerequisite to be future proof regarding syntax and to be able to release your BO.
+
+define behavior for Z_I_HCM_MASTER_IMG alias HCMMaster
+//late numbering
+//lock master
+//etag master <field_name>
+{
+  field( readonly ) e_number;
+  field( mandatory : create ) e_name;
+  create;
+  update;
+  delete;
+}

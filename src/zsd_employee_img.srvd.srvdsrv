@@ -1,0 +1,4 @@
+@EndUserText.label: 'Employees'
+define service ZSD_EMPLOYEE_IMG {
+  expose Z_C_EMPLOYEE_IMG as employees;
+}
